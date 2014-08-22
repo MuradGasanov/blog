@@ -3,8 +3,9 @@
 from django.conf.urls import patterns, url
 from main.views import *
 
-MANAGER_BASE_URL = "manager/"
+MANAGER_BASE_URL = ""
 urlpatterns = patterns('main.views',
                        url(r'^$', index),
-                       url(r'^posts$', Post.read),
+                       url(r'^post-list/$', get_posts),
+                       url(r'^random/$', create_fixture),
 )

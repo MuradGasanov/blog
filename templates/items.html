@@ -1,0 +1,17 @@
+<ul data-max-pages="{{ max_pages }}">
+{% for post in posts %}
+    <li class="post">
+        {% if post.post_image != "" %}
+            <div class="post-image"><img src="{{ post.post_image }}" alt="{{ post.title }}">
+                <div class="box"></div>
+            </div>
+        {% endif %}
+
+        <div class="post-content">
+            <h3 class="title">{{ post.title }}</h3>
+            <p class="text">{{ post.cut_text }}</p>
+            <p class="date">{{ post.date|date:'d.m.Y'  }}</p></div>
+        <a class="more ir blank expand bb-url" href="/blog/post/{{ post.id }}/"></a>
+    </li>
+{% endfor %}
+</ul>

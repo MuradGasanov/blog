@@ -1,0 +1,133 @@
+{% load staticfiles %}
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Blog</title>
+    <!-- <meta name="viewport" content="width=device-width"> -->
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="classification" content="">
+
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="apple-touch-fullscreen" content="yes">
+
+
+    <link rel="shortcut icon" href="{% static "img/faveicon.ico" %}" type="image/x-icon">
+
+
+<link rel="stylesheet" href="{% static "css/post.css" %}" type="text/css" />
+
+    <script>
+        window.__PAGE_TITLE__ = '';
+        window.__SECTION_TITLE__ = '';
+
+        window.__STATIC_URL__ = "{{ STATIC_URL }}";
+        window.__MEDIA_URL__ = "{{ MEDIA_URL }}";
+
+{#        window.__ARTIST_URL__ = "/en/artists/";#}
+{#        window.__ARTIST_NAV__ = "/en/artists-nav/";#}
+{#        window.__ARTIST_HASH__ = "artists/";#}
+
+{#        window.__EXPO_URL__ = "/en/exhibition/";#}
+{#        window.__EXPO_NAV__ = "/en/exhibitions-nav/";#}
+{#        window.__EXPO_HASH__ = "exhibition/";#}
+    </script>
+    <script src="{% static "js/libs/modernizr-2.5.3.min.js" %}"></script>
+
+<script>
+    window.__BLOG_URL__ = '/blog/';
+    window.__BLOG_POST_URL__ = '/blog/post/';
+    window.__URL_LIST__ = '/blog/post-list/';
+    window.__MAXPAGE__ = 2;
+</script>
+
+</head>
+
+<body class="menu-fixed">
+
+<div class="nav-content-wrapper">
+    <div class="nav-content grid-width">
+        <div class="bg-nav"></div>
+        <h1 class="logo"><a href="/" class="expand">Главная</a></h1>
+        <nav class="main-nav">
+{#            <div class="border">#}
+{#                <div class="ball"></div>#}
+{#                <div class="ball_small ball_left"></div>#}
+{#                <div class="ball_small ball_right"></div>#}
+{#            </div>#}
+{#            <ul>#}
+{#                <li class="link-exposicao it-exposicao"><a href="/en/#exhibition/"></a></li>#}
+{#                <li class="link-artistas"><a href="/en/#artists/"></a></li>#}
+{#                <li class="link-zipper"><a href="/en/#zipper/"></a></li>#}
+{#                <li class="link-social"><a href="/en/#social/"></a></li>#}
+{#                <li class="link-contato"><a href="/en/#contact/"></a></li>#}
+{#                <li class="active"><a href="/en/blog/"></a></li>#}
+{#                <li id="switch-lang" class="it-lang">#}
+{#                    <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='S6BgeuAC6Ue2IOkJkQ6Q8ntxADbs73rm' /></div>#}
+{##}
+{#                    <a href="/pt/" class="setlang-button" data-lang="pt"></a>#}
+{##}
+{#                </li>#}
+{#            </ul>#}
+        </nav>
+    </div>
+</div>
+
+
+<div class="blog-wrapper">
+    <div class="blog-container blog-grid">
+        <div class="blog-title">
+            <h2 class="title"><a href="/blog/" class="bb-url">Личный блог</a></h2>
+
+            <form class="search-form" action="." method="get">
+                <select class="category-filter">
+                    <option value="0">Категория</option>
+                    <option value="0">Все</option>
+
+                    <option value="1">1</option>
+
+                    <option value="2">2</option>
+
+                    <option value="3">3</option>
+
+                    <option value="4">4</option>
+
+                </select>
+
+                <input type="text" placeholder="ПОИСК" name="q" id="query">
+                <input type="submit" value="ok">
+            </form>
+
+            <a class="back-button bb-url" href="/blog/">Назад</a>
+        </div>
+
+
+        <ul class="posts clearfix">
+
+
+        </ul>
+
+        <p class="load-more state-loading">
+            <img src="{% static "img/loading_posts.gif" %}" alt="" class="loading">
+        </p>
+    </div>
+</div>
+
+
+<ul class="blog-nav hidden">
+    <li class="prev disabled"><a class="ir bb-url" href="#">вперед</a></li>
+    <li class="next disabled"><a class="ir bb-url" href="#">назад</a></li>
+</ul>
+
+<div class="post-loading"><img src="{% static "img/loading.gif" %}" alt=""></div>
+
+<script type="text/javascript" src="{% static "js/libs/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "js/post.js" %}"></script>
+
+    </body>
+</html>

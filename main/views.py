@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+import datetime
+from django.http.response import HttpResponse
+
 from django.shortcuts import render, render_to_response
+import math
 from main import models
 import json
 
@@ -8,38 +13,46 @@ def index(request):
 
 
 def get_posts(request):
-    options = None
-    if "options" in request.POST:
-        options = json.loads(request.POST.get("options"))
-    terms = models.Post.objects.all()
-    total = terms.count()
-    if options:
-        skip = options.get("skip", None)
-        take = options.get("take", None)
-        query = options.get("query", "")
-        category = options.get("category", 0)
+    count_per_page = 6
+    posts = models.Post.objects.all()
 
-        if query:
-            terms = terms.filter(title__istartswith=query)
+    page = int(request.GET.get("page", 1))
+    skip = (page-1)*count_per_page
+    take = skip+count_per_page
+    query = request.GET.get("query", "")
+    category = int(request.GET.get("category", 0))
+    tag = request.GET.get("tag", "")
+
+    if category:
+        posts = posts.filter(category_id=int(category))
+
+    max_pages = int(math.ceil(len(posts)/float(count_per_page)))
+    posts = posts[skip:take]
+
+    return render_to_response("items.html", {"posts": posts, "max_pages": max_pages})
+
+
+def create_fixture(request):
+    tag1 = models.Tag.objects.create(name="tag 1")
+    tag2 = models.Tag.objects.create(name="tag 2")
+    category = models.Category.objects.create(name="Category")
+    for i in range(1, 100):
+        if i % 2 == 0:
+            img = ""
+            text='<h2 style="text-align: center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><img src="/temp_pic/temp-pic-1.jpg" style="max-width: 350px; max-height: 270px;"></div></div><p> Aenean non augue eget odio sagittis accumsan vitae quis felis. In luctus lectus mi, commodo dignissim velit venenatis nec. Mauris id augue odio. Nulla sollicitudin lorem ac nibh consequat, vitae interdum nulla mattis. Etiam viverra dui in est aliquet, lacinia semper felis egestas. Donec iaculis bibendum quam ut viverra. Suspendisse non imperdiet enim. Nunc ut lacus sed nibh iaculis ornare. Nullam sit amet nunc massa. Ut tincidunt posuere viverra. Cras vel luctus ante. Ut iaculis vestibulum dolor eu bibendum. Praesent et mauris tellus. Quisque ac lectus ipsum.</p><p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce eu ante id leo pellentesque malesuada quis non lorem. Nam commodo et nulla nec consectetur. Sed non dapibus nisl. Praesent eget facilisis neque. Nulla in auctor tellus. Proin ac sem congue dolor elementum condimentum non et sem.</p><h3>Curabitur scelerisque leo lorem, non hendrerit lacus hendrerit at.</h3><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><cuttag/><iframe src="//www.youtube.com/embed/oGgIYyG4u0k?feature=player_detailpage&amp;wmode=opaque" allowfullscreen="" wmode="Opaque" style="width: 350px; height: 205px;" frameborder="0" height="360" width="640"></iframe></div></div><p> Etiam auctor augue non augue lacinia, sit amet sollicitudin dolor rhoncus. Sed feugiat nulla nec lacus volutpat aliquet. Aenean sapien erat, pulvinar sed fringilla in, scelerisque quis tellus. Ut blandit vehicula sodales. Vivamus placerat urna dolor, eget cursus est commodo at. Nullam vitae libero mi.</p><p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras lobortis vitae mi nec placerat. Fusce aliquam elit eget luctus tristique. Proin ultricies vehicula leo, id luctus dui ultricies et. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam eget iaculis lorem, in imperdiet sapien. Aenean a nibh cursus, ultricies metus ut, consectetur mi. Nulla facilisi. Mauris placerat aliquam lorem ac lacinia. Sed a nulla viverra, suscipit orci quis, gravida dui. Quisque non massa sem</p><p>Mauris scelerisque, lacus eu dictum pharetra, sem lacus feugiat justo, ut eleifend leo mi tristique mauris. Sed varius pretium porta. Aenean nec neque vitae metus venenatis dapibus vel convallis massa. Etiam id mauris ullamcorper, dapibus turpis nec, volutpat magna. Vestibulum mollis pharetra adipiscing. Quisque euismod mi fringilla mi ultrices venenatis. Ut vel orci sapien. Nulla tempus metus eleifend tempor euismod.</p><h3>Duis laoreet vulputate velit non vulputate.</h3><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><img src="/temp_pic/temp-pic-2.jpg" style="max-width: 350px; max-height: 270px;"></div></div><p> In non enim eu leo iaculis venenatis in iaculis purus. Maecenas vitae placerat dui. Sed mattis felis lacinia, pellentesque nisl nec, scelerisque nulla. Fusce lobortis aliquam massa eget fermentum. Cras quis tellus nec ligula tristique pretium. Nulla non urna quis sapien luctus aliquet ut et turpis. Donec consectetur ac velit at rutrum. Nullam feugiat, neque ac lacinia vehicula, elit orci commodo purus, nec semper velit nibh in turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sed lectus orci. Pellentesque laoreet non ipsum nec ultricies.</p><h3>Curabitur ullamcorper hendrerit felis.</h3><p> Sed scelerisque eleifend lectus, nec molestie tortor vulputate vitae. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus eu lectus at odio tempus suscipit. Nam tincidunt luctus posuere. Sed eget velit commodo, dictum purus porttitor, interdum tortor. Sed luctus augue non massa suscipit tincidunt. Donec ac pulvinar ligula. Vivamus convallis, nunc eu iaculis scelerisque, lectus dui pretium metus, quis egestas dui est sed mauris. Cras id velit aliquam, molestie arcu eu, ornare massa. Aliquam tempus accumsan purus, laoreet iaculis ante ultrices ut.</p><p>Nulla ut feugiat purus, vel ullamcorper mi. Suspendisse dapibus elit ut congue mattis. Nunc malesuada ut dolor vitae cursus. Morbi at facilisis erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam sodales neque et leo fermentum imperdiet. In id ipsum eu nisl blandit iaculis. Cras tristique lectus et ipsum mollis commodo. Cras id dui velit. Etiam volutpat eleifend justo. Praesent et sodales tellus, quis fringilla quam. Ut nec elementum enim. Nam fermentum massa quis velit viverra scelerisque. In hac habitasse platea dictumst. Vestibulum aliquam risus nec ante elementum pulvinar. Phasellus malesuada tellus lacus, et vehicula est convallis in.</p>',
         else:
-            terms = terms.filter(title__icontains=query)
-        if category:
-            terms = terms.filter(project_id=int(category))
-        total = terms.count()
-        terms = terms[skip:skip + take]
-    # items = list(terms.values("title", "description", "author__id", "author__name"))
-    items = []
-    for term in terms:
-        items.append({
-            "id": term.id,
-            "title": term.title,
-            "description": term.description,
-            "author": term.author.username,
-            "author_id": term.author.id,
-            "project": term.project.name if term.project else "",
-            "project_id": term.project.id if term.project else "",
-            "create_at": term.create_at,
-            "can_edit": (term.author.id == request.user.id) or request.user.is_staff
-        })
-    return HttpResponse(json.dumps({"items": items, "total": total}, default=dt_handler),
-                        content_type="application/json")
+            img = "/static/random.jpg"
+            text='<h2 style="text-align: center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><img src="/temp_pic/temp-pic-1.jpg" style="max-width: 350px; max-height: 270px;"></div></div><p> Aenean non augue eget odio sagittis accumsan vitae quis felis. In luctus lectus mi, commodo dignissim velit venenatis nec. Mauris id augue odio. Nulla sollicitudin lorem ac nibh consequat, vitae interdum nulla mattis. Etiam viverra dui in est aliquet, lacinia semper felis egestas. Donec iaculis bibendum quam ut viverra. Suspendisse non imperdiet enim. Nunc ut lacus sed nibh iaculis ornare. Nullam sit amet nunc massa. Ut tincidunt posuere viverra. Cras vel luctus ante. Ut iaculis vestibulum dolor eu bibendum. Praesent et mauris tellus. Quisque ac lectus ipsum.</p><p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce eu ante id leo pellentesque malesuada quis non lorem. Nam commodo et nulla nec consectetur. <cuttag/>Sed non dapibus nisl. Praesent eget facilisis neque. Nulla in auctor tellus. Proin ac sem congue dolor elementum condimentum non et sem.</p><h3>Curabitur scelerisque leo lorem, non hendrerit lacus hendrerit at.</h3><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><iframe src="//www.youtube.com/embed/oGgIYyG4u0k?feature=player_detailpage&amp;wmode=opaque" allowfullscreen="" wmode="Opaque" style="width: 350px; height: 205px;" frameborder="0" height="360" width="640"></iframe></div></div><p> Etiam auctor augue non augue lacinia, sit amet sollicitudin dolor rhoncus. Sed feugiat nulla nec lacus volutpat aliquet. Aenean sapien erat, pulvinar sed fringilla in, scelerisque quis tellus. Ut blandit vehicula sodales. Vivamus placerat urna dolor, eget cursus est commodo at. Nullam vitae libero mi.</p><p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras lobortis vitae mi nec placerat. Fusce aliquam elit eget luctus tristique. Proin ultricies vehicula leo, id luctus dui ultricies et. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam eget iaculis lorem, in imperdiet sapien. Aenean a nibh cursus, ultricies metus ut, consectetur mi. Nulla facilisi. Mauris placerat aliquam lorem ac lacinia. Sed a nulla viverra, suscipit orci quis, gravida dui. Quisque non massa sem</p><p>Mauris scelerisque, lacus eu dictum pharetra, sem lacus feugiat justo, ut eleifend leo mi tristique mauris. Sed varius pretium porta. Aenean nec neque vitae metus venenatis dapibus vel convallis massa. Etiam id mauris ullamcorper, dapibus turpis nec, volutpat magna. Vestibulum mollis pharetra adipiscing. Quisque euismod mi fringilla mi ultrices venenatis. Ut vel orci sapien. Nulla tempus metus eleifend tempor euismod.</p><h3>Duis laoreet vulputate velit non vulputate.</h3><div class="mrge-content-block mrge-left-side" style="max-width: 350px; max-height: 270px;" contenteditable="false"><div class="mrge-content-block-item" style="max-width: 350px; max-height: 270px;"><img src="/temp_pic/temp-pic-2.jpg" style="max-width: 350px; max-height: 270px;"></div></div><p> In non enim eu leo iaculis venenatis in iaculis purus. Maecenas vitae placerat dui. Sed mattis felis lacinia, pellentesque nisl nec, scelerisque nulla. Fusce lobortis aliquam massa eget fermentum. Cras quis tellus nec ligula tristique pretium. Nulla non urna quis sapien luctus aliquet ut et turpis. Donec consectetur ac velit at rutrum. Nullam feugiat, neque ac lacinia vehicula, elit orci commodo purus, nec semper velit nibh in turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sed lectus orci. Pellentesque laoreet non ipsum nec ultricies.</p><h3>Curabitur ullamcorper hendrerit felis.</h3><p> Sed scelerisque eleifend lectus, nec molestie tortor vulputate vitae. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus eu lectus at odio tempus suscipit. Nam tincidunt luctus posuere. Sed eget velit commodo, dictum purus porttitor, interdum tortor. Sed luctus augue non massa suscipit tincidunt. Donec ac pulvinar ligula. Vivamus convallis, nunc eu iaculis scelerisque, lectus dui pretium metus, quis egestas dui est sed mauris. Cras id velit aliquam, molestie arcu eu, ornare massa. Aliquam tempus accumsan purus, laoreet iaculis ante ultrices ut.</p><p>Nulla ut feugiat purus, vel ullamcorper mi. Suspendisse dapibus elit ut congue mattis. Nunc malesuada ut dolor vitae cursus. Morbi at facilisis erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam sodales neque et leo fermentum imperdiet. In id ipsum eu nisl blandit iaculis. Cras tristique lectus et ipsum mollis commodo. Cras id dui velit. Etiam volutpat eleifend justo. Praesent et sodales tellus, quis fringilla quam. Ut nec elementum enim. Nam fermentum massa quis velit viverra scelerisque. In hac habitasse platea dictumst. Vestibulum aliquam risus nec ante elementum pulvinar. Phasellus malesuada tellus lacus, et vehicula est convallis in.</p>',
+
+        new = models.Post.objects.create(
+            title=u"Заголовок для статьи %d" % i,
+            text=text,
+            date=datetime.datetime.now(),
+            category=category,
+            post_image=img,
+            is_public=True
+        )
+        new.save()
+        new.tags.add(tag1)
+        new.tags.add(tag2)
+    return HttpResponse("done")
