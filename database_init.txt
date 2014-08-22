@@ -1,0 +1,5 @@
+mysql -uroot -p'ROOTPASSWORD'
+
+CREATE DATABASE blog CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER 'blog'@'localhost' IDENTIFIED BY 'blog';
+GRANT ALL PRIVILEGES ON blog.* TO ‘blog'@'localhost';
