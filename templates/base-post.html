@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load categories %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static "css/post.css" %}" type="text/css" />
+{% endblock %}
+{% block head-script %}
+    <script>
+        window.__PAGE_TITLE__ = '';
+        window.__SECTION_TITLE__ = '';
+        window.__STATIC_URL__ = "{{ STATIC_URL }}";
+        window.__MEDIA_URL__ = "{{ MEDIA_URL }}";
+    </script>
+    <script src="{% static "js/libs/modernizr-2.5.3.min.js" %}"></script>
+    <script>
+        window.__BLOG_URL__ = '/blog/';
+        window.__BLOG_POST_URL__ = '/blog/post/';
+        window.__URL_LIST__ = '/blog/post-list/';
+    {#        window.__MAXPAGE__ = 2;#}
+    </script>
+{% endblock %}
+{% block blog-container %}
+    <div class="blog-title">
+        <h2 class="title"><a href="/blog/" class="bb-url">Личный блог</a></h2>
+
+        <form class="search-form" action="." method="get">
+            <select class="category-filter">
+                <option value="0">Все</option>
+                {% categories %}
+            </select>
+
+            <input type="text" placeholder="ПОИСК" name="q" id="query">
+            <input type="submit" value="ok">
+        </form>
+
+        <a class="back-button bb-url" href="/blog/">Назад</a>
+    </div>
+    {% block post %}
+    {% endblock %}
+    <ul class="posts clearfix"></ul>
+    <p class="load-more state-loading">
+        <img src="{% static "img/loading_posts.gif" %}" alt="" class="loading">
+    </p>
+{% endblock %}
+{% block footer %}
+    <div class="post-loading"><img src="{% static "img/loading.gif" %}" alt=""></div>
+{% endblock %}
+{% block footer-script %}
+    <script type="text/javascript" src="{% static "js/libs/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/post.js" %}"></script>
+{% endblock %}

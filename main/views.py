@@ -52,6 +52,10 @@ def post(request, pk):
     return render_to_response("post.html", {"post": post, "next": next, "prev": prev})
 
 
+def edit_post(request):
+    return render_to_response("add-post.html")
+
+
 def create_fixture(request):
     tag1 = models.Tag.objects.create(name="tag 1")
     tag2 = models.Tag.objects.create(name="tag 2")

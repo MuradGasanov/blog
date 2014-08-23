@@ -1,0 +1,303 @@
+@import url('http://fonts.googleapis.com/css?family=Cuprum:400,700');
+@import url('http://fonts.googleapis.com/css?family=Droid+Sans:400,700');
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em,
+img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u,
+i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table,
+caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details,
+embed, figure, figcaption, footer, header, hgroup, menu, nav, output,
+ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline
+}
+
+html {
+    line-height: 1
+}
+
+ol, ul {
+    list-style: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+    vertical-align: middle
+}
+
+q, blockquote {
+    quotes: none
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+    content: "";
+    content: none
+}
+
+a img {
+    border: none
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+    display: block
+}
+
+textarea, input[type="search"], input[type="submit"], input[type="text"] {
+    font-family: 'Cuprum', sans-serif;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    background: transparent;
+    border: 0
+}
+
+input[type="submit"] {
+    cursor: pointer
+}
+
+input[type="text"] {
+    outline: 0;
+    padding: 0
+}
+
+textarea {
+    resize: none;
+    outline: none;
+    overflow: auto
+}
+
+button {
+    border: 0;
+    cursor: pointer
+}
+
+a {
+    text-decoration: none;
+    outline: 0
+}
+
+p {
+    margin: 0;
+    padding: 0
+}
+
+b, strong {
+    font-weight: bold
+}
+
+i, em {
+    font-style: italic
+}
+
+body {
+    font-family: 'Cuprum', sans-serif;
+    font-size: 10px;
+    width: 100%;
+    height: 100%
+}
+.expand {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+}
+
+.grid-width {
+    width: 960px;
+    margin: 0 auto
+}
+
+.blog-grid {
+    width: 934px;
+    margin: 0 auto
+}
+.nav-content-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    z-index: 999;
+    height: 65px;
+    left: 0;
+    top: 44px
+}
+
+body.menu-fixed .nav-content-wrapper {
+    position: fixed;
+    top: 0
+}
+
+.nav-content {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 65px;
+    margin-left: -585px
+}
+
+body.menu-fixed .nav-content {
+    top: 0
+}
+
+.nav-content .bg-nav {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin-left: -960px;
+    background: #171717;
+    height: 65px;
+    width: 1920px
+}
+
+.nav-content .logo {
+    text-indent: -119988px;
+    overflow: hidden;
+    text-align: left;
+    background-image: url('../img/logo.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    width: 135px;
+    height: 48px;
+    display: none;
+    position: absolute;
+    left: 46px;
+    top: 5px
+}
+
+.main-nav {
+    position: absolute;
+    right: 40px;
+    top: 20px
+}
+
+.main-nav .border {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+    bottom: 1px;
+    border-bottom: 1px solid #434343
+}
+
+.main-nav .ball {
+    text-indent: -119988px;
+    overflow: hidden;
+    text-align: left;
+    background-image: url('../img/nav_ball.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    width: 8px;
+    height: 8px;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 1px
+}
+
+.main-nav .ball_small {
+    text-indent: -119988px;
+    overflow: hidden;
+    text-align: left;
+    background-image: url('../img/nav_ball_small.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    top: 3px
+}
+
+.main-nav .ball_left {
+    left: 0
+}
+
+.main-nav .ball_right {
+    right: 0
+}
+
+.main-nav ul {
+    position: relative
+}
+
+.main-nav li {
+    float: left;
+    width: 100px;
+    text-align: center;
+    background: url('../img/bg_item_nav.png') no-repeat center bottom;
+    padding-bottom: 16px;
+    text-transform: uppercase
+}
+
+.main-nav li.it-exposicao {
+    width: 125px;
+    margin-right: 10px
+}
+
+.main-nav li.it-lang {
+    width: 60px
+}
+
+.main-nav a {
+    color: #a7a7a7;
+    font-size: 1.8em;
+    -webkit-transition: all 300ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+    -webkit-transition-delay: 0ms;
+    -moz-transition: all 300ms cubic-bezier(0.250, 0.100, 0.250, 1.000) 0ms;
+    -o-transition: all 300ms cubic-bezier(0.250, 0.100, 0.250, 1.000) 0ms;
+    transition: all 300ms cubic-bezier(0.250, 0.100, 0.250, 1.000) 0ms
+}
+
+.main-nav a:hover {
+    color: #eaeaea
+}
+
+.main-nav li.active a {
+    color: #eaeaea
+}
+
+body {
+    background-color: #f5f7f6
+}
+
+body.post-open {
+    overflow: hidden
+}
+
+.nav-content-wrapper {
+    position: relative;
+    top: 0;
+    left: 0
+}
+
+.nav-content-wrapper .nav-content {
+    margin-left: -480px
+}
+
+.nav-content-wrapper .logo {
+    display: block
+}
+
+.blog-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative
+}
+.blog-container {
+    padding-top: 100px;
+    padding-bottom: 56px;
+    position: relative
+}

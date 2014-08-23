@@ -1,6 +1,6 @@
 {% load staticfiles %}
-{% load categories %}
 <!doctype html>
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,20 +14,11 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="apple-touch-fullscreen" content="yes">
     <link rel="shortcut icon" href="{% static "img/faveicon.ico" %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static "css/post.css" %}" type="text/css" />
-    <script>
-        window.__PAGE_TITLE__ = '';
-        window.__SECTION_TITLE__ = '';
-        window.__STATIC_URL__ = "{{ STATIC_URL }}";
-        window.__MEDIA_URL__ = "{{ MEDIA_URL }}";
-    </script>
-    <script src="{% static "js/libs/modernizr-2.5.3.min.js" %}"></script>
-    <script>
-        window.__BLOG_URL__ = '/blog/';
-        window.__BLOG_POST_URL__ = '/blog/post/';
-        window.__URL_LIST__ = '/blog/post-list/';
-        window.__MAXPAGE__ = 2;
-    </script>
+    <link rel="stylesheet" href="{% static "css/base.css" %}"/>
+    {% block stylesheet %}
+    {% endblock %}
+    {% block head-script %}
+    {% endblock %}
 </head>
 <body class="menu-fixed {% if post %}post-detail-page{% endif %}">
 <div class="nav-content-wrapper">
@@ -55,33 +46,15 @@
 </div>
 <div class="blog-wrapper">
     <div class="blog-container blog-grid">
-        <div class="blog-title">
-            <h2 class="title"><a href="/blog/" class="bb-url">Личный блог</a></h2>
-
-            <form class="search-form" action="." method="get">
-                <select class="category-filter">
-                    <option value="0">Все</option>
-                    {% categories %}
-                </select>
-
-                <input type="text" placeholder="ПОИСК" name="q" id="query">
-                <input type="submit" value="ok">
-            </form>
-
-            <a class="back-button bb-url" href="/blog/">Назад</a>
-        </div>
-        {% block post %}
+        {% block blog-container %}
         {% endblock %}
-        <ul class="posts clearfix"></ul>
-        <p class="load-more state-loading">
-            <img src="{% static "img/loading_posts.gif" %}" alt="" class="loading">
-        </p>
     </div>
 </div>
 {% block nav_button %}
 {% endblock %}
-<div class="post-loading"><img src="{% static "img/loading.gif" %}" alt=""></div>
-<script type="text/javascript" src="{% static "js/libs/jquery.js" %}"></script>
-<script type="text/javascript" src="{% static "js/post.js" %}"></script>
+{% block footer %}
+{% endblock %}
+{% block footer-script %}
+{% endblock %}
     </body>
 </html>

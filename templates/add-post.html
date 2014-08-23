@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static "js/libs/morrigan/css/morrigan-jquery-editor.css" %}"/>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/add-post.css" %}"/>
+{% endblock %}
+{% block head-script %}
+{% endblock %}
+{% block blog-container %}
+    <div class="form-wrapper">
+        <div id="editor"></div>
+    </div>
+{% endblock %}
+{% block footer-script %}
+    <script src="{% static "js/libs/jquery-2.1.1.min.js" %}"></script>
+    <script src="{% static "js/libs/jQueryUI/js/jquery-ui-1.9.2.custom.min.js" %}"></script>
+    <script src="{% static "js/libs/morrigan/morrigan-jquery-editor.js" %}"></script>
+    <script src="{% static "js/add-post.js" %}"></script>
+{% endblock %}
