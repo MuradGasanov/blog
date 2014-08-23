@@ -26,5 +26,8 @@ class Post(models.Model):
         index = self.text.find("<cuttag/>")
         return strip_tags(self.text[0:index])
 
+    class Meta:
+        ordering = ["-date"]
+
 
 

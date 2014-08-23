@@ -9,7 +9,7 @@ import json
 
 
 def index(request):
-    return render_to_response("post.html")
+    return render_to_response("post-list.html")
 
 
 def get_posts(request):
@@ -30,6 +30,26 @@ def get_posts(request):
     posts = posts[skip:take]
 
     return render_to_response("items.html", {"posts": posts, "max_pages": max_pages})
+
+
+def post(request, pk):
+    pk = int(pk)
+
+    post = models.Post.objects.get(id=pk)
+
+    try:
+        next = post.get_next_by_date()
+        next = "/post/%d/" % next.id
+    except:
+        next = ""
+
+    try:
+        prev = post.get_previous_by_date()
+        prev = "/post/%d/" % prev.id
+    except:
+        prev = ""
+
+    return render_to_response("post.html", {"post": post, "next": next, "prev": prev})
 
 
 def create_fixture(request):
