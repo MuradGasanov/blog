@@ -9,7 +9,25 @@
 {% endblock %}
 {% block blog-container %}
     <div class="form-wrapper">
-        <div id="editor"></div>
+        <div class="field">
+            <div><label for="title">Заголовок</label></div>
+            <div><input type="text" name="title" id="title"/></div>
+            <div class="validation-msg" data-for="title">Обязательно для заполнения</div>
+        </div>
+        <div class="field">
+            <div><span>Сообщение</span></div>
+            <div id="editor" ></div>
+            <div class="validation-msg" data-for="editor">Обязательно для заполнения</div>
+        </div>
+        <div class="field">
+            <div><input type="checkbox" id="is_public" name="is_public" checked/>
+                <label for="is_public"> Публиковать</label></div>
+            <div><input type="checkbox" id="use_post_image" name="use_post_image" checked/>
+                <label for="use_post_image" title="Первое изоображение в сообщение будет выводится в ленте новостей">
+                    Использовать изображение в сообщение в качестве обложки</label></div>
+        </div>
+        <span id="submit" class="submit-button">Сохранить</span>
+        <div class="clearfix"></div>
     </div>
 {% endblock %}
 {% block footer-script %}

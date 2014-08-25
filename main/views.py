@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 import datetime
-from django.http.response import HttpResponse
-
-from django.shortcuts import render, render_to_response
+import urllib
+import cStringIO
 import math
-from main import models
 import json
+
+from PIL import Image
+from BeautifulSoup import BeautifulSoup
+from django.http.response import HttpResponse, HttpResponseForbidden
+from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_exempt
+
+from main.additionally.common import *
+
+from blog import settings
+from main import models
 
 
 def index(request):
@@ -54,6 +63,55 @@ def post(request, pk):
 
 def edit_post(request):
     return render_to_response("add-post.html")
+
+
+@csrf_exempt
+def upload_image(request):
+    if "upload_img" in request.FILES:
+        img = request.FILES.get("upload_img")
+    elif "upload_url" in request.POST:
+        try:
+            file = cStringIO.StringIO(urllib.urlopen(request.POST.get("upload_url")).read())
+            img = Image.open(file)
+        except:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseForbidden()
+    if not img.content_type.startswith("image"):
+        return HttpResponseForbidden()
+    dir_name = settings.path(
+        os.path.join(
+            settings.MEDIA_ROOT,
+            datetime.datetime.now().strftime("%Y-%m-%d")))
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+    img_file_name = settings.path(
+        os.path.join(dir_name, transliterate(img._get_name())))
+    img_file = open(uniquify(img_file_name), 'wb')
+    for chunk in img.chunks():
+        img_file.write(chunk)
+    img_file.close()
+    img_url = settings.path(os.path.join(
+        settings.MEDIA_URL, get_file_with_parents(img_file.name)))
+    return HttpResponse(json.dumps({"data": img_url}), content_type="application/json")
+
+
+def create_post(request):
+    item = json.loads(request.POST.get("item"))
+    post = models.Post.objects.create(
+        title=item.get("title"),
+        text=item.get("text"),
+        is_public=item.get("is_public"),
+        date=datetime.datetime.now(),
+        category_id=1
+    )
+    if item.get("use_post_image"):
+        soup = BeautifulSoup(post.text)
+        post_img = soup.findAll('img')[0]['src']
+        if post_img:
+            post.post_image = post_img
+    post.save()
+    return HttpResponse(json.dumps({"id": post.id}), content_type="application/json")
 
 
 def create_fixture(request):

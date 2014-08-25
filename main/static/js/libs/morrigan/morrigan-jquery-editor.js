@@ -24,7 +24,7 @@ $.widget( "morrigan.morrigan_editor", {
                     caption:'Ok'
                 },
                 cancel:{
-                    caption:'Cancel'
+                    caption:'Отмена'
                 }
             }
         },
@@ -40,6 +40,9 @@ $.widget( "morrigan.morrigan_editor", {
                     video: '205px'
                 }
             }
+        },
+        onKeyUp: function () {
+
         }
     },
 
@@ -114,8 +117,10 @@ $.widget( "morrigan.morrigan_editor", {
                 actions: ['ok', 'cancel'],
                 customForm: function (editor, container) {
                     var html = '<form action="' + editor.options.imageUpload + '" method="post" enctype="multipart/form-data" target="mrge-support-iframe">' +
-                               '<div class="mrge-option"><input type="file" name="upload_img"/></div><div class="mrge-divider">or</div>' +
-                               '<div class="mrge-option"><input type="text" placeholder=" add image link here" name="upload_url"></div></form>';
+                               '<div class="mrge-option"><input type="file" name="upload_img"/></div>' +
+//                               '<div class="mrge-divider">or</div>' +
+//                               '<div class="mrge-option"><input type="text" placeholder=" add image link here" name="upload_url"></div>' +
+                        '</form>';
                     container.html($(html));
                 },
                 onShow: function (element, editor) {
@@ -1015,7 +1020,9 @@ $.widget( "morrigan.morrigan_editor", {
                 if (!topElements[0] || topElements[0].nodeType == 3 || topElements[0].nodeName == 'DIV') {
                     editor._window.document.execCommand("formatBlock", false, "p");
                 }
-                if (topElements[0].nodeType === 3) return;
+                if (topElements.length > 0) {
+                    if (topElements[0].nodeType === 3) return;
+                } else { return }
                 this._onSelectionChangedHandlers(e, topElements, isCaret);
             }
         };
@@ -1027,6 +1034,7 @@ $.widget( "morrigan.morrigan_editor", {
         };
 
         this._defaultBehaviorKeyDownHandler = function (e) {
+            editor.options.onKeyUp(e)
         };
 
         this.bindCustomEvents = function () {

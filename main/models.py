@@ -18,7 +18,7 @@ class Post(models.Model):
     date = models.DateTimeField()
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag)
-    post_image = models.CharField(max_length=300)
+    post_image = models.CharField(max_length=300, null=True)
     is_public = models.BooleanField(default=False, blank=True)
 
     @property
