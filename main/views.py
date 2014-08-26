@@ -61,8 +61,8 @@ def post(request, pk):
     return render_to_response("post.html", {"post": post, "next": next, "prev": prev})
 
 
-def edit_post(request):
-    return render_to_response("add-post.html")
+def add_post(request):
+    return render_to_response("post-form.html")
 
 
 @csrf_exempt
@@ -96,7 +96,18 @@ def upload_image(request):
     return HttpResponse(json.dumps({"data": img_url}), content_type="application/json")
 
 
-def create_post(request):
+def tags(request):
+    tag = request.GET.get("tag", "")
+
+    tag_list = models.Tag.objects.filter(name__icontains=tag)
+
+    if tag_list:
+        return HttpResponse(json.dumps(tag_list), content_type="application/json")
+    else:
+        return HttpResponse("[]", content_type="application/json")
+
+
+def save_post(request):
     item = json.loads(request.POST.get("item"))
     post = models.Post.objects.create(
         title=item.get("title"),

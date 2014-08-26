@@ -8,8 +8,10 @@ urlpatterns = patterns('main.views',
                        url(r'^$', index),
                        url(r'^post-list/$', get_posts),
                        url(r'^post/(?P<pk>\d+)/$', post),
-                       url(r'^post-edit/$', edit_post),
-                       url(r'^post-edit/upload-image/$', upload_image),
-                       url(r'^post-edit/create/$', create_post),
+                       url(r'^add-post/$', add_post),
+                       url(r'^add-post/upload-image/$', upload_image),
+                       url(r'^add-post/save/$', save_post),
+                       url(r'^add-post/tags/$', tags),
+
                        url(r'^random/$', create_fixture),
 )

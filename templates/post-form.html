@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load categories %}
 {% block stylesheet %}
+    <link rel="stylesheet" href="{% static "js/libs/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.min.css" %}"/>
     <link rel="stylesheet" href="{% static "js/libs/morrigan/css/morrigan-jquery-editor.css" %}"/>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static "css/add-post.css" %}"/>
@@ -16,8 +18,21 @@
         </div>
         <div class="field">
             <div><span>Сообщение</span></div>
-            <div id="editor" ></div>
+            <div id="editor"></div>
             <div class="validation-msg" data-for="editor">Обязательно для заполнения</div>
+        </div>
+        <div class="field">
+            <span>Категория</span>
+             <select id="categories">
+                    <option value="0">Категория...</option>
+                    {% categories "all" %}
+             </select>
+            <div class="validation-msg" data-for="category">Обязательно для заполнения</div>
+        </div>
+        <div class="field">
+            <span>Теги</span>
+            <input id="tags" placeholder="Укажите через запятую несколько тегов"/>
+            <div class="validation-msg" data-for="tags">Обязательно для заполнения</div>
         </div>
         <div class="field">
             <div><input type="checkbox" id="is_public" name="is_public" checked/>
@@ -27,12 +42,13 @@
                     Использовать изображение в сообщение в качестве обложки</label></div>
         </div>
         <span id="submit" class="submit-button">Сохранить</span>
+
         <div class="clearfix"></div>
     </div>
 {% endblock %}
 {% block footer-script %}
     <script src="{% static "js/libs/jquery-2.1.1.min.js" %}"></script>
-    <script src="{% static "js/libs/jQueryUI/js/jquery-ui-1.9.2.custom.min.js" %}"></script>
+    <script src="{% static "js/libs/jquery-ui/js/jquery-ui-1.9.2.custom.min.js" %}"></script>
     <script src="{% static "js/libs/morrigan/morrigan-jquery-editor.js" %}"></script>
     <script src="{% static "js/add-post.js" %}"></script>
 {% endblock %}
