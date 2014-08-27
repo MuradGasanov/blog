@@ -7,6 +7,7 @@ import json
 
 from PIL import Image
 from BeautifulSoup import BeautifulSoup
+from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
@@ -28,12 +29,18 @@ def get_posts(request):
     page = int(request.GET.get("page", 1))
     skip = (page-1)*count_per_page
     take = skip+count_per_page
-    query = request.GET.get("query", "")
+    query = request.GET.get("q", "")
     category = int(request.GET.get("category", 0))
     tag = request.GET.get("tag", "")
 
     if category:
         posts = posts.filter(category_id=int(category))
+
+    if tag:
+        posts = posts.filter(tags__name=tag)
+
+    if query:
+        posts = posts.filter(Q(title__icontains=query) | Q(text__icontains=query))
 
     max_pages = int(math.ceil(len(posts)/float(count_per_page)))
     posts = posts[skip:take]
@@ -99,7 +106,7 @@ def upload_image(request):
 def tags(request):
     tag = request.GET.get("tag", "")
 
-    tag_list = models.Tag.objects.filter(name__icontains=tag)
+    tag_list = list(models.Tag.objects.filter(name__icontains=tag).values_list("name", flat=True))
 
     if tag_list:
         return HttpResponse(json.dumps(tag_list), content_type="application/json")
@@ -109,19 +116,41 @@ def tags(request):
 
 def save_post(request):
     item = json.loads(request.POST.get("item"))
+
+    category = item.get("category")
+    if type(category) == unicode and len(category) != 0:
+        category = models.Category.objects.create(name=category)
+    elif type(category) == int:
+        category = models.Category.objects.get(id=category)
+    else:
+        return HttpResponseForbidden()
+
     post = models.Post.objects.create(
         title=item.get("title"),
         text=item.get("text"),
         is_public=item.get("is_public"),
         date=datetime.datetime.now(),
-        category_id=1
+        category=category
     )
     if item.get("use_post_image"):
         soup = BeautifulSoup(post.text)
-        post_img = soup.findAll('img')[0]['src']
-        if post_img:
-            post.post_image = post_img
+        try:
+            post_img = soup.findAll('img')[0]['src']
+            if post_img:
+                post.post_image = post_img
+        except:
+            pass
     post.save()
+
+    tags = []
+    for t in item.get("tags", []):
+        try:
+            tag, created = models.Tag.objects.get_or_create(name=t)
+        except:
+            tag = None
+        if tag:
+            tags.append(tag)
+    post.tags.add(*tags)
     return HttpResponse(json.dumps({"id": post.id}), content_type="application/json")
 
 

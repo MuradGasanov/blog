@@ -23,8 +23,11 @@ class Post(models.Model):
 
     @property
     def cut_text(self):
-        index = self.text.find("<cuttag/>")
-        return strip_tags(self.text[0:index])
+        index = self.text.find("<cut/>")
+        if index != -1:
+            return strip_tags(self.text[0:index]).replace(";/&nbsp;", " ")
+        else:
+            return strip_tags(self.text)[0:300].replace(";/&nbsp;", " ")
 
     class Meta:
         ordering = ["-date"]

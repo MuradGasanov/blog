@@ -249,7 +249,13 @@ App.objects.Posts = nova.Class({initialize: function () {
 }, initLoadMore: function () {
     var that = this;
     that.el.loadmore({url: window.__URL_LIST__, pageNumber: 1, autoAppend: false, onBeforeAppend: function (fragment) {
-        var ul = fragment.find('ul'), html = $(ul.html()), maxPages = ul.attr('data-max-pages');
+        if (fragment.find("ul").data("max-pages") == 0) {
+
+            return
+        }
+        var ul = fragment.find('ul'),
+            html = $(ul.html()),
+            maxPages = ul.attr('data-max-pages');
         that.el.loadmore('setOptions', {maxPages: maxPages});
         html.imagesLoaded(function () {
             that.el.isotope('insert', html);

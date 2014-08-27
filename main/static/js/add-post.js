@@ -118,7 +118,7 @@ $(function () {
             var self = this;
             // Selected an item, nothing to do
             if (ui.item) {
-                self.val = ui.item.option.value;
+                self.val = parseInt(ui.item.option.value);
                 self.options.onSelect(event);
                 return;
             }
@@ -129,7 +129,7 @@ $(function () {
                 valid = false;
             this.element.children("option").each(function () {
                 if ($(this).text().toLowerCase() === valueLowerCase) {
-                    self.val = $(this).val();
+                    self.val = parseInt($(this).val());
                     this.selected = valid = true;
                     self.options.onSelect(event);
                     return false;
@@ -234,11 +234,17 @@ $(function () {
         is_public: $("#is_public"),
         use_post_image: $("#use_post_image"),
         get: function () {
+            var tags = this.tags.val();
+            tags = $.trim(tags);
+            tags = split(tags);
+            $.each(tags, function(i, o) {
+                tags[i] = $.trim(o);
+            });
             return {
                 title: this.title.val(),
                 text: this.text.morrigan_editor("html"),
                 category: this.categories.combobox("value"),
-                tags: this.tags.val(),
+                tags: tags,
                 is_public: this.is_public.prop('checked'),
                 use_post_image: this.use_post_image.prop('checked')
             }
@@ -254,7 +260,7 @@ $(function () {
                 is_valid = false;
                 $(".validation-msg[data-for='editor']").show()
             }
-            if (data.tags.length == 0) {
+            if (this.tags.val().length == 0) {
                 is_valid = false;
                 $(".validation-msg[data-for='tags']").show()
             }
@@ -275,10 +281,10 @@ $(function () {
             return
         }
         var data = form.get();
-//        $.post("/blog/add-post/save/", {item: JSON.stringify(data)},
-//            function (response) {
-//                console.log(response);
-//                window.location.href = '/blog/post/' + response.id + "/";
-//            }, "json")
+        $.post("/blog/add-post/save/", {item: JSON.stringify(data)},
+            function (response) {
+                console.log(response);
+                window.location.href = '/blog/post/' + response.id + "/";
+            }, "json")
     })
 });
