@@ -114,7 +114,7 @@ def tags(request):
         return HttpResponse("[]", content_type="application/json")
 
 
-def save_post(request):
+def create_post(request):
     item = json.loads(request.POST.get("item"))
 
     category = item.get("category")
@@ -140,6 +140,8 @@ def save_post(request):
                 post.post_image = post_img
         except:
             pass
+    else:
+        post.post_image = None
     post.save()
 
     tags = []
@@ -152,6 +154,64 @@ def save_post(request):
             tags.append(tag)
     post.tags.add(*tags)
     return HttpResponse(json.dumps({"id": post.id}), content_type="application/json")
+
+
+def update_post(request):
+    item = json.loads(request.POST.get("item"))
+
+    category = item.get("category")
+    if type(category) == unicode and len(category) != 0:
+        category = models.Category.objects.create(name=category)
+    elif type(category) == int:
+        category = models.Category.objects.get(id=category)
+    else:
+        return HttpResponseForbidden()
+
+    post = models.Post.objects.get(id=int(item.get("id")))
+
+    post.title = item.get("title")
+    post.text = item.get("text")
+    post.is_public = item.get("is_public")
+    # post.date = datetime.datetime.now()
+    post.category = category
+
+    if item.get("use_post_image"):
+        soup = BeautifulSoup(post.text)
+        try:
+            post_img = soup.findAll('img')[0]['src']
+            if post_img:
+                post.post_image = post_img
+        except:
+            pass
+    else:
+        post.post_image = None
+    post.save()
+
+    tags = []
+    for t in item.get("tags", []):
+        try:
+            tag, created = models.Tag.objects.get_or_create(name=t)
+        except:
+            tag = None
+        if tag:
+            tags.append(tag)
+    post.tags.add(*tags)
+    return HttpResponse(json.dumps({"id": post.id}), content_type="application/json")
+
+
+def read_post(request):
+    item = json.loads(request.POST.get("item"))
+    p = models.Post.objects.get(id=int(item.get("id")))
+    pr = {
+        "id": p.id,
+        "title": p.title,
+        "text": p.text,
+        "category": p.category_id,
+        "tags": [t.name for t in p.tags.all()],
+        "is_public": p.is_public,
+        "use_post_image": bool(p.post_image)
+    }
+    return HttpResponse(json.dumps(pr), content_type="application/json")
 
 
 def create_fixture(request):

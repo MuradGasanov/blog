@@ -95,3 +95,7 @@
     width: 550px;
     padding: 1px 8px;
 }
+
+.post-loading {
+    display: block;
+}

@@ -7,7 +7,8 @@
      {% if prev != "" %}
         data-prev-post="{{ prev }}"
      {% endif %} >
-    <h3 class="title">{{ post.title }}</h3>
+    <h3 class="title">{{ post.title }}
+        <a href="/blog/add-post/#id={{ post.id }}" id="edit_post" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></h3>
     <p class="date">{{ post.date|date:'d.m.Y' }}</p>
     <ul class="meta clearfix">
         <li class="cat">{{ post.category.name }}</li>

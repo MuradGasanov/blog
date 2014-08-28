@@ -25,7 +25,8 @@ $(function () {
     });
     $.widget("custom.combobox", {
         options: {
-            onSelect: function () {}
+            onSelect: function () {
+            }
         },
         val: null,
         _create: function () {
@@ -147,8 +148,20 @@ $(function () {
             this.element.show();
         },
 
-        value: function () {
-            return this.val
+        value: function (data) {
+            if (typeof data == "undefined") {
+                return this.val
+            }
+            var self = this;
+            $.each(self.element.children("option"), function (i, o) {
+                var $o = $(o);
+                console.log($o.val());
+                if (data == $o.val()) {
+                    self.element.val(data);
+                    self.val = data;
+                    self.input.val($o.text());
+                }
+            });
         }
     });
 
@@ -160,7 +173,24 @@ $(function () {
         return split(term).pop();
     }
 
+    function getHashParams() {
+        var hashParams = {};
+        var e,
+            a = /\+/g,
+            r = /([^&;=]+)=?([^&;]*)/g,
+            d = function (s) {
+                return decodeURIComponent(s.replace(a, " "));
+            },
+            q = window.location.hash.substring(1);
+
+        while (e = r.exec(q))
+            hashParams[d(e[1])] = d(e[2]);
+
+        return hashParams;
+    }
+
     var form = {
+        id: 0,
         title: $("#title").on("keyup", function (e) {
             var self = $(this);
             if (self.val().length == 0) {
@@ -237,10 +267,11 @@ $(function () {
             var tags = this.tags.val();
             tags = $.trim(tags);
             tags = split(tags);
-            $.each(tags, function(i, o) {
+            $.each(tags, function (i, o) {
                 tags[i] = $.trim(o);
             });
             return {
+                id: this.id,
                 title: this.title.val(),
                 text: this.text.morrigan_editor("html"),
                 category: this.categories.combobox("value"),
@@ -248,6 +279,15 @@ $(function () {
                 is_public: this.is_public.prop('checked'),
                 use_post_image: this.use_post_image.prop('checked')
             }
+        },
+        set: function(data) {
+           this.id = data.id;
+           this.title.val(data.title);
+           this.text.morrigan_editor("html", data.text);
+           this.categories.combobox("value", data.category);
+           this.tags.val(data.tags.join(", "));
+           this.is_public.prop('checked', data.is_public);
+           this.use_post_image.prop('checked', data.use_post_image);
         },
         validate: function () {
             var data = this.get();
@@ -272,7 +312,7 @@ $(function () {
         }
     };
 
-    window.cat = form.categories;
+    var is_edit = false;
 
     $("#submit").on("click", function (e) {
         console.log(form.get());
@@ -281,10 +321,34 @@ $(function () {
             return
         }
         var data = form.get();
-        $.post("/blog/add-post/save/", {item: JSON.stringify(data)},
+        $.post("/blog/add-post/"+is_edit?"update/":"create/", {item: JSON.stringify(data)},
             function (response) {
-                console.log(response);
                 window.location.href = '/blog/post/' + response.id + "/";
             }, "json")
-    })
+    });
+
+    var loader = {
+        _le: $(".post-loading"),
+        show: function () {
+            this._le.stop().fadeIn()
+        },
+        hide: function () {
+            this._le.stop().fadeOut()
+        }
+    };
+
+    if (window.location.hash) {
+        var hash = getHashParams();
+        is_edit = true;
+        if ("id" in hash) {
+            var id = parseInt(hash.id);
+            $.post("read/", {item: JSON.stringify({id: id})},
+            function (data) {
+                form.set(data);
+                loader.hide();
+            })
+        }
+    } else {
+        loader.hide();
+    }
 });

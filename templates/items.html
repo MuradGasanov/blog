@@ -7,7 +7,7 @@
             </div>
         {% endif %}
         <div class="post-content">
-            <h3 class="title">{{ post.title }}</h3>
+            <h3 class="title">{{ post.title }} {% if not post.is_public %} <span style="color: rgba(232, 0, 0, 0.6)">(Не&nbsp;публикуется)</span> {% endif %}</h3>
             <p class="text">{{ post.cut_text }}</p>
             <p class="date">{{ post.date|date:'d.m.Y'  }}</p></div>
         <a class="more ir blank expand bb-url" href="/blog/post/{{ post.id }}/"></a>

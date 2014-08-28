@@ -664,24 +664,6 @@ html.lt-ie8 .post-detail .date {
     opacity: 0
 }
 
-.post-loading {
-    width: 100%;
-    height: 100%;
-    background: url('../img/bg_loading.png') repeat 0 0;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 5;
-    display: none
-}
-
-.post-loading img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -8px 0 0 -20px
-}
-
 body .fancybox-close {
     width: 64px;
     height: 61px;
