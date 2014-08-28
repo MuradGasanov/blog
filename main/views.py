@@ -94,7 +94,9 @@ def upload_image(request):
         os.makedirs(dir_name)
     img_file_name = settings.path(
         os.path.join(dir_name, transliterate(img._get_name())))
-    img_file = open(uniquify(img_file_name), 'wb')
+    img_file_name = uniquify(img_file_name)
+    img_file = open(img_file_name, 'wb')
+    os.chmod(img_file_name, 0755)
     for chunk in img.chunks():
         img_file.write(chunk)
     img_file.close()
