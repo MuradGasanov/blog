@@ -321,7 +321,7 @@ $(function () {
             return
         }
         var data = form.get();
-        $.post("/blog/add-post/"+is_edit?"update/":"create/", {item: JSON.stringify(data)},
+        $.post("/blog/add-post/"+(is_edit?"update/":"create/"), {item: JSON.stringify(data)},
             function (response) {
                 window.location.href = '/blog/post/' + response.id + "/";
             }, "json")
