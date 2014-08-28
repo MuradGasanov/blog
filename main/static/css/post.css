@@ -74,6 +74,10 @@
     color: #7fbcc6
 }
 
+.blog-title .title span{
+    text-transform: none;
+}
+
 .blog-title .back-button {
     background: url('../img/bg_back_button.png') no-repeat 10px center #72afb6;
     display: block;
